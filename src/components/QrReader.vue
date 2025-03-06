@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed, defineExpose, defineEmits } from 'vue';
+import { ref, onUnmounted, computed, defineExpose, defineEmits } from 'vue';
 import jsQR from 'jsqr';
 
 // イベントの定義
@@ -53,10 +53,11 @@ const jwtPayload = computed(() => {
 });
 
 // 日付をフォーマットする関数
-const formatDate = (timestamp: number): string => {
+const formatDate = (timestamp: number | string): string => {
   if (!timestamp) return '';
   
-  const date = new Date(timestamp * 1000);
+  const numericTimestamp = typeof timestamp === 'string' ? parseInt(timestamp, 10) : timestamp;
+  const date = new Date(numericTimestamp * 1000);
   return date.toLocaleString('ja-JP', {
     year: 'numeric',
     month: '2-digit',

@@ -76,7 +76,7 @@ const handleDragLeave = (event: DragEvent) => {
   event.preventDefault();
   const relatedTarget = event.relatedTarget as Node;
   // ドロップエリア内の要素にドラッグした場合は無視
-  if (event.currentTarget && event.currentTarget.contains(relatedTarget)) {
+  if (event.currentTarget && (event.currentTarget as Node).contains(relatedTarget)) {
     return;
   }
   dragActive.value = false;
