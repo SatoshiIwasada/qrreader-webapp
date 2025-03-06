@@ -22,6 +22,41 @@ const isJwt = computed(() => {
   return jwt && /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]*$/.test(jwt);
 });
 
+// BASE64URLエンコードされたデータかどうかを判定する
+const isBase64Url = computed(() => {
+  if (isJwt.value) return false; // JWTの場合は除外
+  
+  const data = qrResult.value;
+  // BASE64URLエンコードされたデータは通常、A-Z, a-z, 0-9, -, _ のみで構成される
+  return data && /^[A-Za-z0-9-_]+$/.test(data);
+});
+
+// BASE64URLエンコードされたデータをデコードする
+const decodedBase64 = computed(() => {
+  if (!isBase64Url.value) return null;
+  
+  try {
+    // BASE64URLエンコードをデコード（-を+に、_を/に置換）
+    const base64 = qrResult.value.replace(/-/g, '+').replace(/_/g, '/');
+    // パディングを追加（4の倍数になるように）
+    const paddedBase64 = base64 + '==='.slice(0, (4 - base64.length % 4) % 4);
+    
+    // デコード
+    const decoded = atob(paddedBase64);
+    
+    // デコードした結果が表示可能なテキストかどうかを確認
+    const isPrintable = /^[\x20-\x7E\n\r\t\u3000-\u30FF\u3040-\u309F\u4E00-\u9FFF]+$/.test(decoded);
+    
+    return {
+      text: decoded,
+      isPrintable
+    };
+  } catch (error) {
+    console.error('BASE64URLデコードに失敗しました:', error);
+    return null;
+  }
+});
+
 // JWTのヘッダーを解析する
 const jwtHeader = computed(() => {
   if (!isJwt.value) return null;
@@ -404,6 +439,19 @@ defineExpose({
         <a v-if="qrResult.startsWith('http')" :href="qrResult" target="_blank" class="result-link">
           リンクを開く
         </a>
+      </div>
+      
+      <!-- BASE64URLデコード結果 -->
+      <div v-if="isBase64Url && decodedBase64 && decodedBase64.isPrintable" class="base64-container">
+        <div class="base64-header">
+          <h4>BASE64URLデコード結果</h4>
+        </div>
+        
+        <div class="base64-content">
+          <div class="base64-data">
+            <pre>{{ decodedBase64.text }}</pre>
+          </div>
+        </div>
       </div>
       
       <!-- JWT解析結果 -->
@@ -817,6 +865,48 @@ video {
   margin-right: 5px;
 }
 
+/* BASE64URLデコード結果のスタイル */
+.base64-container {
+  width: 100%;
+  margin: 15px 0;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  overflow: hidden;
+}
+
+.base64-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: #e9ecef;
+  border-bottom: 1px solid #ddd;
+}
+
+.base64-header h4 {
+  margin: 0;
+  color: #495057;
+}
+
+.base64-content {
+  padding: 15px;
+}
+
+.base64-data {
+  background-color: white;
+  border-radius: 4px;
+  padding: 10px;
+  border: 1px solid #dee2e6;
+  overflow-x: auto;
+}
+
+.base64-data pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
 @media (prefers-color-scheme: dark) {
   .input-method-selector,
   .result-container {
@@ -870,6 +960,26 @@ video {
   
   .jwt-timestamp {
     color: #adb5bd;
+  }
+  
+  .base64-container {
+    background-color: #2d3033;
+    border-color: #444;
+  }
+  
+  .base64-header {
+    background-color: #383c40;
+    border-color: #444;
+  }
+  
+  .base64-header h4 {
+    color: #e9ecef;
+  }
+  
+  .base64-data {
+    background-color: #444;
+    border-color: #555;
+    color: #e9ecef;
   }
 }
 </style> 
