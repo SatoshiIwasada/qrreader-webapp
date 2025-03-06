@@ -445,7 +445,7 @@ defineExpose({
                   <!-- 日付フィールドの場合は変換して表示 -->
                   <template v-if="['exp', 'iat', 'nbf'].includes(key) && typeof value === 'number'">
                     {{ formatDate(value) }}
-                    <span class="jwt-timestamp">({{ value }})</span>
+                    <span class="jwt-timestamp">({{ String(value) }})</span>
                   </template>
                   <template v-else>{{ value }}</template>
                 </span>
