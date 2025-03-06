@@ -52,20 +52,9 @@ const jwtPayload = computed(() => {
   }
 });
 
-// 日付をフォーマットする関数
-const formatDate = (timestamp: number | string): string => {
-  if (!timestamp) return '';
-  
-  const numericTimestamp = typeof timestamp === 'string' ? parseInt(timestamp, 10) : timestamp;
-  const date = new Date(numericTimestamp * 1000);
-  return date.toLocaleString('ja-JP', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit'
-  });
+// 日付フィールドかどうかをチェックする関数
+const isDateField = (fieldName: string): boolean => {
+  return ['exp', 'iat', 'nbf'].includes(fieldName);
 };
 
 // カメラストリームを保持する変数
@@ -443,9 +432,9 @@ defineExpose({
                 <span class="jwt-key">{{ key }}:</span>
                 <span class="jwt-value">
                   <!-- 日付フィールドの場合は変換して表示 -->
-                  <template v-if="['exp', 'iat', 'nbf'].includes(key) && typeof value === 'number'">
-                    {{ formatDate(value) }}
-                    <span class="jwt-timestamp">({{ String(value) }})</span>
+                  <template v-if="isDateField(String(key))">
+                    {{ typeof value === 'number' ? new Date(value * 1000).toLocaleString('ja-JP') : String(value) }}
+                    <span v-if="typeof value === 'number'" class="jwt-timestamp">({{ value }})</span>
                   </template>
                   <template v-else>{{ value }}</template>
                 </span>
