@@ -1,30 +1,21 @@
-# QRコードリーダーWebアプリ
+# QRコードリーダー
 
-Vue 3、TypeScript、Viteを使用したQRコードリーダーWebアプリケーションです。QRコードをスキャンし、その内容を表示します。
+ブラウザで動作するシンプルなQRコードリーダーアプリケーションです。カメラを使用したリアルタイムスキャンと画像ファイルからのQRコード読み取りに対応しています。
 
 ## 機能
 
-- カメラもしくはファイル選択を用いたQRコードのスキャン
-- スキャン結果の表示
-- URLの場合は直接リンクを開くオプション
-- モバイルデバイス対応のレスポンシブデザイン
-- JWTの自動判定と、JWT内のデコード実施(平文部分のみ)
+- カメラを使用したQRコードのリアルタイムスキャン
+- 画像ファイルからのQRコード読み取り
+- ドラッグ＆ドロップによる画像ファイルの読み込み
+- JWTトークンの自動検出と解析
+- レスポンシブデザイン（モバイル対応）
+- ダークモード対応
 
-## 技術スタック
+## デモ
 
-- Vue 3
-- TypeScript
-- Vite
-- jsQR (QRコード読み取りライブラリ)
+[GitHub Pages](https://satoshiiwasada.github.io/qrreader-webapp/)で動作デモを確認できます。
 
-## 開発方法
-
-### 必要条件
-
-- Node.js 16.0以上
-- npm 7.0以上
-
-### インストール
+## 開発環境のセットアップ
 
 ```bash
 # リポジトリのクローン
@@ -33,33 +24,49 @@ cd qrreader-webapp
 
 # 依存関係のインストール
 npm install
-```
 
-### 開発サーバーの起動
-
-```bash
+# 開発サーバーの起動
 npm run dev
 ```
 
-### ビルド
+## ビルド
 
 ```bash
+# 本番用にビルド
 npm run build
-```
 
-### プレビュー
-
-```bash
+# ビルド結果のプレビュー
 npm run preview
 ```
 
 ## デプロイ
 
-このプロジェクトはGitHub Pagesを使用して自動的にデプロイされます。`main`ブランチにプッシュすると、GitHub Actionsによって自動的にビルドとデプロイが行われます。
+このプロジェクトはGitHub Actionsを使用して、GitHub Pagesに自動的にデプロイされるように設定されています。
+
+1. `main`ブランチにコードをプッシュすると、GitHub Actionsが自動的に実行されます
+2. ビルドが成功すると、`gh-pages`ブランチに生成されたファイルがデプロイされます
+3. GitHub Pagesの設定で、`gh-pages`ブランチが公開ソースとして設定されていることを確認してください
+
+手動でデプロイする場合は、以下のコマンドを実行します：
+
+```bash
+# ビルド
+npm run build
+
+# gh-pagesブランチにデプロイ（gh-pagesパッケージが必要）
+npm run deploy
+```
+
+## 技術スタック
+
+- [Vue 3](https://v3.vuejs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vitejs.dev/)
+- [jsQR](https://github.com/cozmo/jsQR) - QRコード検出ライブラリ
 
 ## ライセンス
 
-MIT
+[MIT](LICENSE)
 
 ## 注意事項
 
