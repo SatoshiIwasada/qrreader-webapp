@@ -1,13 +1,14 @@
 # QRコードリーダーWebアプリ
 
-Vue 3、TypeScript、Viteを使用したQRコードリーダーWebアプリケーションです。カメラを使用してQRコードをスキャンし、その内容を表示します。
+Vue 3、TypeScript、Viteを使用したQRコードリーダーWebアプリケーションです。QRコードをスキャンし、その内容を表示します。
 
 ## 機能
 
-- カメラを使用したQRコードのスキャン
+- カメラもしくはファイル選択を用いたQRコードのスキャン
 - スキャン結果の表示
 - URLの場合は直接リンクを開くオプション
 - モバイルデバイス対応のレスポンシブデザイン
+- JWTの自動判定と、JWT内のデコード実施(平文部分のみ)
 
 ## 技術スタック
 
@@ -27,7 +28,7 @@ Vue 3、TypeScript、Viteを使用したQRコードリーダーWebアプリケ�
 
 ```bash
 # リポジトリのクローン
-git clone https://github.com/yourusername/qrreader-webapp.git
+git clone https://github.com/SatoshiIwasada/qrreader-webapp.git
 cd qrreader-webapp
 
 # 依存関係のインストール
@@ -62,5 +63,5 @@ MIT
 
 ## 注意事項
 
-- カメラへのアクセス許可が必要です
+- カメラを利用した読み込みを行う場合はカメラへのアクセス許可が必要です
 - HTTPSでの実行が必要です（ローカル開発環境を除く）
